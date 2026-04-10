@@ -1,0 +1,138 @@
+<html>
+<head>
+<title>Correction controle 3</title>
+</head>
+<body >
+
+<form id="familleForm">
+    <label for="nom">Nom:</label>
+    <input type="text" id="nom" name="nom" required><br><br>
+    
+    <label for="cin">CIN:</label>
+    <input type="text" id="cin" name="cin" required><br><br>
+    
+    <label for="situation">Situation:</label>
+    <input type="text" id="situation" name="situation" required><br><br>
+    
+    <label for="nbrEnfants">Nombre d'enfants:</label>
+    <input type="number" id="nbrEnfants" name="nbrEnfants" required><br><br>
+    
+    <label for="ville">Ville:</label>
+    <select id="ville" name="ville" required>
+        <option value="Casablanca">Casablanca</option>
+        <option value="Rabat">Rabat</option>
+        <option value="Marrakech">Marrakech</option>
+        <option value="Tanger">Tanger</option>
+    </select><br><br>
+    
+    <button type="button" onclick="AjouFm()">Ajouter kjhjhFamille</button>
+<button onclick="ExporterJson(tableToVariable())">exporter</button>
+
+</form>
+
+
+ <table id="familleTable">
+    <tr>
+        <th>Nom</th>
+        <th>cin</th>
+        <th>situation</th>
+        <th>nbr enfant</th>
+		 <th>ville</th>
+		 <th>action</th>
+    </tr>
+	  
+</table>
+<label type="label" id="nbrFamilles">
+
+<script>
+function NbrFm() {
+    var table = document.getElementById("familleTable");
+    var rowCount = table.rows.length - 1; 
+    document.getElementById("nbrFamilles").innerText = "Nombre de familles: " + rowCount;
+}
+
+NbrFm();
+
+function AjouFm() {
+
+var table = document.getElementById("familleTable");
+    var nom = document.getElementById("nom").value;
+    var cin = document.getElementById("cin").value;
+    var situation = document.getElementById("situation").value;
+    var nbrEnfants = document.getElementById("nbrEnfants").value;
+    var ville = document.getElementById("ville").value;
+
+var newRowHTML ='<tr><td>'+nom+'</td><td>'+cin+'</td> <td>'+situation+'</td> <td>'+nbrEnfants+'</td> <td>'+ville+'</td><td><button onclick="supprimerLigne(this)">Supprimer</button></td></tr>';
+
+    table.insertAdjacentHTML('beforeend', newRowHTML);
+NbrFm();
+}
+
+function supprimerLigne(elt){
+elt.parentNode.parentNode.parentNode.removeChild(elt.parentNode.parentNode);
+
+NbrFm();
+}
+function ExporterJson(familles) {
+            // Convertir le tableau d'objets en chaîne JSON
+            let contenuJSON = JSON.stringify(familles, null, 2);
+
+            // Créer un nouveau Blob avec le contenu JSON
+            let blob = new Blob([contenuJSON], { type: "application/json" });
+
+            // Créer un lien de téléchargement
+            let url = URL.createObjectURL(blob);
+
+            // Créer un élément <a> pour le lien de téléchargement
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = "export.json";
+            // Ajouter l'élément <a> au document
+            document.body.appendChild(a);
+            // Simuler un clic sur le lien pour démarrer le téléchargement
+            a.click();
+            // Supprimer l'élément <a> du document
+            document.body.removeChild(a);
+            // Révoquer l'URL pour libérer la mémoire
+            URL.revokeObjectURL(url);
+        }
+
+function tableToVariable() {
+    var table = document.getElementById("familleTable");
+    var familles = [];
+    for (var i = 1, row; row = table.rows[i]; i++) {
+        var famille = {
+            nom: row.cells[0].innerText,
+            cin: row.cells[1].innerText,
+            situation: row.cells[2].innerText,
+            nbrEnfants: row.cells[3].innerText,
+            ville: row.cells[4].innerText
+        };
+        familles.push(famille);
+    }
+    console.log(familles); // Afficher dans la console pour vérification
+    return familles;
+} 
+    
+
+
+
+</script>
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
